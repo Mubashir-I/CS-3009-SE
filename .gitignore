@@ -52,4 +52,4 @@ build/
 .project
 
 ### Configration File ###
-config.properties
+**/src/main/resources/config.properties
