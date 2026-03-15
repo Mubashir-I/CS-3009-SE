@@ -50,3 +50,6 @@ build/
 .settings/
 .classpath
 .project
+
+### Configration File ###
+config.properties

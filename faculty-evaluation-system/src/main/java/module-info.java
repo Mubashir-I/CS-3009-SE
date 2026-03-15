@@ -10,7 +10,8 @@ module com.nuyron.facultyevaluationsystem {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires java.sql;
 
-    opens com.nuyron.facultyevaluationsystem to javafx.fxml;
+    opens com.nuyron.facultyevaluationsystem.controller to javafx.fxml;
     exports com.nuyron.facultyevaluationsystem;
 }
