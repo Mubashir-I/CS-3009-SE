@@ -1,9 +1,9 @@
-package faculty_evaluation.DAO;
+package com.nuyron.facultyevaluationsystem.DAO;
 
-import faculty_evaluation.models.Course;
-import faculty_evaluation.models.CourseAssignment;
-import faculty_evaluation.models.StudentEnrollment;
-import faculty_evaluation.models.Database;
+import com.nuyron.facultyevaluationsystem.models.Course;
+import com.nuyron.facultyevaluationsystem.models.CourseAssignment;
+import com.nuyron.facultyevaluationsystem.models.StudentEnrollment;
+import com.nuyron.facultyevaluationsystem.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +15,7 @@ import java.util.List;
 public class CourseDAO {
     public static boolean addCourse(String courseID, String courseName, String dept){
         String query = "INSERT INTO courses(course_code, course_name, department) VALUES (?,?,?)";
-        try(Connection conn = Database.getConnection();
+        try(Connection conn = DatabaseConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, courseID);
@@ -33,7 +33,7 @@ public class CourseDAO {
     public static List<Course> getAllCourses() {
         List<Course> courseList = new ArrayList<>();
         String query = "SELECT id, course_code, course_name, department FROM courses";
-        try(Connection conn = Database.getConnection();
+        try(Connection conn = DatabaseConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(query);
             ResultSet rs = stmt.executeQuery()){
 
@@ -54,7 +54,7 @@ public class CourseDAO {
 
     public static boolean assignTeacher(String courseCode, String facultyID){
         String query = "INSERT INTO course_assignments (course_id, teacher_username) VALUES (?, ?)";
-        try(Connection conn = Database.getConnection();
+        try(Connection conn = DatabaseConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(query)){
 
             stmt.setString(1, courseCode);
@@ -74,7 +74,7 @@ public class CourseDAO {
                        "FROM course_assignments ca " +
                        "JOIN courses c ON ca.course_id = c.course_code " +
                        "JOIN users u ON ca.teacher_username = u.username";
-        try(Connection conn = Database.getConnection();
+        try(Connection conn = DatabaseConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(query);
             ResultSet rs = stmt.executeQuery()){
 
@@ -100,7 +100,7 @@ public class CourseDAO {
                        "FROM student_enrollments se " +
                        "JOIN course_assignments ca ON se.assignment_id = ca.id " +
                        "JOIN users u ON se.student_username = u.username";
-        try(Connection conn = Database.getConnection();
+        try(Connection conn = DatabaseConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(query);
             ResultSet rs = stmt.executeQuery()){
 
@@ -122,7 +122,7 @@ public class CourseDAO {
     public static boolean enrollStudent(String courseCode, String studentId) {
         String query = "INSERT INTO student_enrollments (assignment_id, student_username) " +
                        "SELECT id, ? FROM course_assignments WHERE course_id = ?";
-        try(Connection conn = Database.getConnection();
+        try(Connection conn = DatabaseConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(query)){
 
             stmt.setString(1, studentId);
@@ -143,7 +143,7 @@ public class CourseDAO {
                        "JOIN courses c ON ca.course_id = c.course_code " +
                        "ORDER BY c.course_code";
 
-        try (Connection conn = Database.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
 
@@ -168,7 +168,7 @@ public class CourseDAO {
                        "WHERE ca.course_id = ? " +
                        "ORDER BY u.name";
 
-        try (Connection conn = Database.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, courseCode);
@@ -201,7 +201,7 @@ public class CourseDAO {
                 "      WHERE se.student_username = ? AND existing_ca.course_id = ? " +
                 "  )";
 
-        try (Connection conn = Database.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setInt(1, assignmentId);
@@ -228,7 +228,7 @@ public class CourseDAO {
                        "JOIN users u ON ca.teacher_username = u.username " +
                        "WHERE se.student_username = ? " +
                        "ORDER BY c.course_code, u.name";
-        try (Connection conn = Database.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, studentUsername);

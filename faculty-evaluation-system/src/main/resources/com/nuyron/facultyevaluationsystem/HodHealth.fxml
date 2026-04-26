@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<TabPane tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nuyron.facultyevaluationsystem.controller.HodHealthController" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+   <tabs>
+      <Tab text="Semester Graph">
+         <content>
+            <AnchorPane>
+               <children>
+                  <VBox spacing="10.0"
+                        AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0"
+                        AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                     <children>
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label text="Select Semester:" style="-fx-text-fill: #425d6a; -fx-font-family: 'Cal Sans Regular';" />
+                              <ComboBox fx:id="semesterComboBox" prefWidth="220.0" onAction="#onSemesterChanged" />
+                           </children>
+                           <padding><Insets bottom="5.0" /></padding>
+                        </VBox>
+                        <Label fx:id="semesterStatusLabel" style="-fx-text-fill: #888; -fx-font-size: 12;" />
+                        <BarChart fx:id="semesterBarChart" VBox.vgrow="ALWAYS" animated="true"
+                                  title="Average Score per Performance Factor">
+                           <xAxis><CategoryAxis label="Performance Factor" /></xAxis>
+                           <yAxis><NumberAxis label="Avg Score (0–100)" lowerBound="0" upperBound="100" tickUnit="10" autoRanging="false" /></yAxis>
+                        </BarChart>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </content>
+      </Tab>
+      <Tab text="Overall Growth">
+         <content>
+            <AnchorPane>
+               <children>
+                  <VBox spacing="10.0"
+                        AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0"
+                        AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                     <children>
+                        <Label text="Performance Factor Trend — Last 8 Semesters"
+                               style="-fx-text-fill: #425d6a; -fx-font-family: 'Cal Sans Regular'; -fx-font-size: 14;" />
+                        <Label fx:id="growthStatusLabel" style="-fx-text-fill: #888; -fx-font-size: 12;" />
+                        <LineChart fx:id="growthLineChart" VBox.vgrow="ALWAYS" animated="true"
+                                   title="Factor Score Trend Over Semesters">
+                           <xAxis><CategoryAxis label="Semester" /></xAxis>
+                           <yAxis><NumberAxis label="Avg Score (0–100)" lowerBound="-10" upperBound="110" tickUnit="10" autoRanging="false" /></yAxis>
+                        </LineChart>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </content>
+      </Tab>
+   </tabs>
+</TabPane>

@@ -14,5 +14,6 @@ module com.nuyron.facultyevaluationsystem {
     requires java.desktop;
 
     opens com.nuyron.facultyevaluationsystem.controller to javafx.fxml;
+    opens com.nuyron.facultyevaluationsystem.models to javafx.base, javafx.fxml;
     exports com.nuyron.facultyevaluationsystem;
 }

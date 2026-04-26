@@ -14,7 +14,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="faculty_evaluation.controllers.TeacherDashboardController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nuyron.facultyevaluationsystem.controller.TeacherDashboardController">
     <top>
         <AnchorPane prefHeight="75.0" prefWidth="720.0" style="-fx-background-color: #426c7a;" BorderPane.alignment="CENTER">
             <children>
@@ -73,6 +73,7 @@
                         <Button text="Courses" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #425D6A; -fx-text-fill: #e0e4ee;" onAction="#onAssignedCoursesClick" onMousePressed="#onPressedSidebarButton" onMouseReleased="#onReleaseSidebarButton" />
                         <Button text="Summary" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #425D6A; -fx-text-fill: #e0e4ee;" onAction="#onFeedbackSummaryClick" onMousePressed="#onPressedSidebarButton" onMouseReleased="#onReleaseSidebarButton" />
                         <Button text="Reviews" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #425D6A; -fx-text-fill: #e0e4ee;" onAction="#onReviewsClick" onMousePressed="#onPressedSidebarButton" onMouseReleased="#onReleaseSidebarButton" />
+                        <Button text="Growth" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #425D6A; -fx-text-fill: #e0e4ee;" onAction="#onGrowthClick" onMousePressed="#onPressedSidebarButton" onMouseReleased="#onReleaseSidebarButton" />
                     </children>
                 </VBox>
             </children>
@@ -82,7 +83,7 @@
     <center>
         <StackPane prefHeight="385.0" prefWidth="590.0" BorderPane.alignment="CENTER" style="-fx-background-color: #f8fafc;">
             <children>
-                <VBox spacing="12.0" maxWidth="560.0" prefWidth="560.0">
+                <VBox fx:id="mainContentVBox" spacing="12.0" maxWidth="560.0" prefWidth="560.0">
                     <children>
                         <Label fx:id="contentTitleLabel" textFill="#2f4f5b">
                             <font>
@@ -135,6 +136,7 @@
                         </VBox>
                     </children>
                 </VBox>
+                <StackPane fx:id="growthContent" visible="false" managed="false" />
             </children>
         </StackPane>
     </center>

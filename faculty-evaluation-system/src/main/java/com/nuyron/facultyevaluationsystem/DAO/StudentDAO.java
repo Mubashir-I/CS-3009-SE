@@ -1,4 +1,4 @@
-package com.nuyron.facultyevaluationsystem.dao;
+package com.nuyron.facultyevaluationsystem.DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

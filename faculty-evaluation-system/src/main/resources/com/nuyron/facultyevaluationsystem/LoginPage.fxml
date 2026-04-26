@@ -11,7 +11,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<SplitPane dividerPositions="0.45" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="460.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="faculty_evaluation.controllers.LoginController">
+<SplitPane dividerPositions="0.45" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="460.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nuyron.facultyevaluationsystem.controller.LoginController">
   <items>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="341.0" prefWidth="200.0" style="-fx-background-color: #426c7a;">
          <children>

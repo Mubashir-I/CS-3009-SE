@@ -8,7 +8,7 @@ import javafx.scene.control.*;
 
 import java.io.IOException;
 
-public class FeedbackFormController {
+public class StudentReviewController {
     @FXML private Label enrollmentContextLabel;
     @FXML private ComboBox<Integer> clarityComboBox;
     @FXML private ComboBox<Integer> difficultyComboBox;

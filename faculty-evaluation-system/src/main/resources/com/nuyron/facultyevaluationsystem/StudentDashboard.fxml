@@ -17,7 +17,7 @@
 
 
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="faculty_evaluation.controllers.StudentDashboardController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nuyron.facultyevaluationsystem.controller.StudentDashboardController">
     <top>
         <AnchorPane prefHeight="75.0" prefWidth="720.0" style="-fx-background-color: #426c7a;" BorderPane.alignment="CENTER">
             <children>
@@ -86,31 +86,40 @@
                                 style="-fx-background-color: #425D6A;"
                                 textFill="#e0e4ee"
                                 onMouseClicked="#onHistoryClick"/>
+                        <Button fx:id="formsButton"
+                                text="Forms"
+                                prefWidth="80.0"
+                                prefHeight="28.0"
+                                style="-fx-background-color: #425D6A;"
+                                textFill="#e0e4ee"
+                                onMouseClicked="#onFormsClick"/>
                     </children>
                 </VBox>
             </children>
         </AnchorPane>
     </left>
     <center>
-        <AnchorPane prefHeight="385.0" prefWidth="613.0" BorderPane.alignment="CENTER">
+        <StackPane fx:id="contentArea" prefHeight="385.0" prefWidth="613.0" BorderPane.alignment="CENTER">
             <children>
-                <Label layoutX="18.0" layoutY="12.0" text="Teachers You Are Studying Under" textFill="#425d6a">
-                    <font>
-                        <Font name="Cal Sans Regular" size="18.0" />
-                    </font>
-                </Label>
-
-                <TableView fx:id="teachersTableView" layoutX="18.0" layoutY="46.0" prefHeight="300.0" prefWidth="576.0">
-                    <columns>
-                        <TableColumn fx:id="courseCodeColumn" prefWidth="100.0" text="Course Code" />
-                        <TableColumn fx:id="courseNameColumn" prefWidth="190.0" text="Course Name" />
-                        <TableColumn fx:id="teacherIdColumn" prefWidth="140.0" text="Teacher ID" />
-                        <TableColumn fx:id="teacherNameColumn" prefWidth="146.0" text="Teacher Name" />
-                    </columns>
-                </TableView>
-
-                <Label fx:id="errorLabel" layoutX="18.0" layoutY="352.0" textFill="red" visible="false" />
+                <AnchorPane fx:id="teachersView" prefHeight="385.0" prefWidth="613.0">
+                    <children>
+                        <Label layoutX="18.0" layoutY="12.0" text="Teachers You Are Studying Under" textFill="#425d6a">
+                            <font>
+                                <Font name="Cal Sans Regular" size="18.0" />
+                            </font>
+                        </Label>
+                        <TableView fx:id="teachersTableView" layoutX="18.0" layoutY="46.0" prefHeight="300.0" prefWidth="576.0">
+                            <columns>
+                                <TableColumn fx:id="courseCodeColumn" prefWidth="100.0" text="Course Code" />
+                                <TableColumn fx:id="courseNameColumn" prefWidth="190.0" text="Course Name" />
+                                <TableColumn fx:id="teacherIdColumn" prefWidth="140.0" text="Teacher ID" />
+                                <TableColumn fx:id="teacherNameColumn" prefWidth="146.0" text="Teacher Name" />
+                            </columns>
+                        </TableView>
+                        <Label fx:id="errorLabel" layoutX="18.0" layoutY="352.0" textFill="red" visible="false" />
+                    </children>
+                </AnchorPane>
             </children>
-        </AnchorPane>
+        </StackPane>
     </center>
 </BorderPane>

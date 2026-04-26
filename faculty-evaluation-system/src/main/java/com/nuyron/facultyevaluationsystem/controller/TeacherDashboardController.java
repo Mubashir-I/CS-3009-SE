@@ -1,17 +1,21 @@
-package faculty_evaluation.controllers;
+package com.nuyron.facultyevaluationsystem.controller;
 
-import faculty_evaluation.DAO.TeacherDAO;
-import faculty_evaluation.models.SceneTools;
-import faculty_evaluation.models.Session;
+import com.nuyron.facultyevaluationsystem.DAO.TeacherDAO;
+import com.nuyron.facultyevaluationsystem.DAO.SessionLogDAO;
+import com.nuyron.facultyevaluationsystem.models.SceneTools;
+import com.nuyron.facultyevaluationsystem.models.Session;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.effect.Effect;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -23,12 +27,11 @@ public class TeacherDashboardController {
     private Button logoutButton;
     @FXML
     private Label contentTitleLabel;
-    @FXML
-    private VBox assignedCoursesPane;
-    @FXML
-    private VBox feedbackSummaryPane;
-    @FXML
-    private VBox reviewsPane;
+    @FXML private VBox assignedCoursesPane;
+    @FXML private VBox feedbackSummaryPane;
+    @FXML private VBox reviewsPane;
+    @FXML private VBox mainContentVBox;
+    @FXML private StackPane growthContent;
 
     @FXML
     private TableView<String[]> assignedCoursesTable;
@@ -89,35 +92,57 @@ public class TeacherDashboardController {
 
     @FXML
     private void onAssignedCoursesClick() {
-        contentTitleLabel.setText("Assigned Courses");
-        assignedCoursesPane.setVisible(true);
-        assignedCoursesPane.setManaged(true);
-        feedbackSummaryPane.setVisible(false);
-        feedbackSummaryPane.setManaged(false);
-        reviewsPane.setVisible(false);
-        reviewsPane.setManaged(false);
+        showOnly(assignedCoursesPane, "Assigned Courses");
     }
 
     @FXML
     private void onFeedbackSummaryClick() {
-        contentTitleLabel.setText("Feedback Summary");
-        feedbackSummaryPane.setVisible(true);
-        feedbackSummaryPane.setManaged(true);
-        assignedCoursesPane.setVisible(false);
-        assignedCoursesPane.setManaged(false);
-        reviewsPane.setVisible(false);
-        reviewsPane.setManaged(false);
+        showOnly(feedbackSummaryPane, "Feedback Summary");
     }
 
     @FXML
     private void onReviewsClick() {
-        contentTitleLabel.setText("Reviews");
-        reviewsPane.setVisible(true);
-        reviewsPane.setManaged(true);
-        assignedCoursesPane.setVisible(false);
-        assignedCoursesPane.setManaged(false);
-        feedbackSummaryPane.setVisible(false);
-        feedbackSummaryPane.setManaged(false);
+        showOnly(reviewsPane, "Reviews");
+    }
+
+    @FXML
+    private void onGrowthClick() {
+        mainContentVBox.setVisible(false);
+        mainContentVBox.setManaged(false);
+        growthContent.setVisible(true);
+        growthContent.setManaged(true);
+        loadGrowthContent();
+    }
+
+    private void showOnly(VBox target, String title) {
+        mainContentVBox.setVisible(true);
+        mainContentVBox.setManaged(true);
+        growthContent.setVisible(false);
+        growthContent.setManaged(false);
+        contentTitleLabel.setText(title);
+
+        for (VBox pane : new VBox[]{assignedCoursesPane, feedbackSummaryPane, reviewsPane}) {
+            pane.setVisible(pane == target);
+            pane.setManaged(pane == target);
+        }
+    }
+
+    private void loadGrowthContent() {
+        if (!growthContent.getChildren().isEmpty()) return; // already loaded
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/nuyron/facultyevaluationsystem/TeacherGrowth.fxml"));
+            Parent view = loader.load();
+            
+            if (view instanceof javafx.scene.control.TabPane) {
+                javafx.scene.control.TabPane tp = (javafx.scene.control.TabPane) view;
+                tp.prefWidthProperty().bind(growthContent.widthProperty());
+                tp.prefHeightProperty().bind(growthContent.heightProperty());
+            }
+            growthContent.getChildren().setAll(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -139,6 +164,7 @@ public class TeacherDashboardController {
 
     @FXML
     private void onLogoutButtonClick() throws IOException {
+        SessionLogDAO.logLogout(Session.sessionLogId != null ? Session.sessionLogId : -1);
         Session.clear();
         SceneTools.changeScene("LoginPage.fxml", logoutButton);
     }

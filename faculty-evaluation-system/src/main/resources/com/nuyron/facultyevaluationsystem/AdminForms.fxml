@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nuyron.facultyevaluationsystem.controller.AdminFormsController">
+   <children>
+      <TabPane tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <tabs>
+          <Tab text="Add Question">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <VBox layoutX="20.0" layoutY="20.0" spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                           <children>
+                              <GridPane hgap="10.0" vgap="10.0">
+                                <columnConstraints>
+                                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" percentWidth="20.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <Label text="Type:" textFill="#425d6a" />
+                                    <Label text="Factor:" textFill="#425d6a" GridPane.rowIndex="1" />
+                                    <Label text="Question:" textFill="#425d6a" GridPane.rowIndex="2" />
+                                    <ChoiceBox fx:id="questionTypeBox" onAction="#handleTypeChange" prefWidth="150.0" GridPane.columnIndex="1" />
+                                    <ChoiceBox fx:id="questionFactorBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <TextArea fx:id="questionTextArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                 </children>
+                              </GridPane>
+                              <VBox fx:id="questionDynamicArea" spacing="10.0" />
+                              <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                                 <children>
+                                    <Label fx:id="addQuestionStatusLabel" />
+                                    <Button mnemonicParsing="false" onAction="#clearQuestionForm" text="Clear" />
+                                    <Button mnemonicParsing="false" onAction="#saveQuestion" text="Save Question" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Questions">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="questionsTableView" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                          <columns>
+                            <TableColumn fx:id="qColId" prefWidth="50.0" text="ID" />
+                            <TableColumn fx:id="qColText" prefWidth="250.0" text="Question Text" />
+                              <TableColumn fx:id="qColType" prefWidth="100.0" text="Type" />
+                              <TableColumn fx:id="qColFactor" prefWidth="150.0" text="Factor" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+            <Tab text="Add Form">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <VBox layoutX="20.0" layoutY="20.0" spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                           <children>
+                              <GridPane hgap="10.0" vgap="10.0">
+                                <columnConstraints>
+                                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" percentWidth="20.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <Label text="Form Name:" textFill="#425d6a" />
+                                    <Label text="Description:" textFill="#425d6a" GridPane.rowIndex="1" />
+                                    <TextField fx:id="formNameField" GridPane.columnIndex="1" />
+                                    <TextArea fx:id="formDescArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                 </children>
+                              </GridPane>
+                              <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label text="Available Questions:" textFill="#425d6a" />
+                                          <TableView fx:id="availableQuestionsTable" prefHeight="150.0">
+                                            <columns>
+                                              <TableColumn fx:id="aqColId" prefWidth="40.0" text="ID" />
+                                              <TableColumn fx:id="aqColText" prefWidth="150.0" text="Text" />
+                                                <TableColumn fx:id="aqColType" prefWidth="70.0" text="Type" />
+                                                <TableColumn fx:id="aqColFactor" prefWidth="100.0" text="Factor" />
+                                            </columns>
+                                          </TableView>
+                                          <Button mnemonicParsing="false" onAction="#addQuestionToForm" text="Add Selected" />
+                                       </children>
+                                    </VBox>
+                                    <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label text="Form Questions:" textFill="#425d6a" />
+                                          <ListView fx:id="selectedQuestionsList" prefHeight="150.0" />
+                                          <Button mnemonicParsing="false" onAction="#removeQuestionFromForm" text="Remove Selected" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                                 <children>
+                                    <Label fx:id="addFormStatusLabel" />
+                                    <Button mnemonicParsing="false" onAction="#clearFormDraft" text="Clear" />
+                                    <Button mnemonicParsing="false" onAction="#saveForm" text="Save Form" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="Forms">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="formsTableView" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                          <columns>
+                            <TableColumn fx:id="fColId" prefWidth="50.0" text="ID" />
+                            <TableColumn fx:id="fColName" prefWidth="150.0" text="Form Name" />
+                              <TableColumn fx:id="fColDesc" prefWidth="200.0" text="Description" />
+                              <TableColumn fx:id="fColQCount" prefWidth="80.0" text="Q Count" />
+                              <TableColumn fx:id="fColCreated" prefWidth="100.0" text="Created" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="Push Form">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <VBox layoutX="20.0" layoutY="20.0" spacing="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                           <children>
+                              <GridPane hgap="15.0" vgap="15.0">
+                                <columnConstraints>
+                                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" percentWidth="30.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <Label text="Select Form:" textFill="#425d6a" />
+                                    <ComboBox fx:id="pushFormComboBox" prefWidth="250.0" GridPane.columnIndex="1" />
+                                    <Label text="Department:" textFill="#425d6a" GridPane.rowIndex="1" />
+                                    <ComboBox fx:id="pushDeptComboBox" onAction="#onDeptSelected" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <Label text="Course:" textFill="#425d6a" GridPane.rowIndex="2" />
+                                    <ComboBox fx:id="pushCourseComboBox" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <Label text="Semester:" textFill="#425d6a" GridPane.rowIndex="3" />
+                                    <ComboBox fx:id="pushSemesterComboBox" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                    <Label text="Start Date:" textFill="#425d6a" GridPane.rowIndex="4" />
+                                    <DatePicker fx:id="pushStartDate" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                    <Label text="End Date:" textFill="#425d6a" GridPane.rowIndex="5" />
+                                    <DatePicker fx:id="pushEndDate" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                 </children>
+                              </GridPane>
+                              <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                                 <children>
+                                    <Label fx:id="pushStatusLabel" />
+                                    <Button mnemonicParsing="false" onAction="#clearPushForm" text="Clear" />
+                                    <Button mnemonicParsing="false" onAction="#pushForm" text="Push Form" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="Scheduled Forms">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="scheduledFormsTableView" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                          <columns>
+                            <TableColumn fx:id="fsColId" prefWidth="40.0" text="ID" />
+                            <TableColumn fx:id="fsColQnaire" prefWidth="120.0" text="Form Name" />
+                            <TableColumn fx:id="fsColDept" prefWidth="80.0" text="Department" />
+                            <TableColumn fx:id="fsColCourse" prefWidth="80.0" text="Course" />
+                            <TableColumn fx:id="fsColSemester" prefWidth="90.0" text="Semester" />
+                            <TableColumn fx:id="fsColStartDate" prefWidth="80.0" text="Start Date" />
+                            <TableColumn fx:id="fsColEndDate" prefWidth="80.0" text="End Date" />
+                            <TableColumn fx:id="fsColStatus" prefWidth="70.0" text="Status" />
+                            <TableColumn fx:id="fsColCreated" prefWidth="100.0" text="Created" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>

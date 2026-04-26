@@ -1,6 +1,6 @@
-package faculty_evaluation.DAO;
+package com.nuyron.facultyevaluationsystem.DAO;
 
-import faculty_evaluation.models.Database;
+import com.nuyron.facultyevaluationsystem.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,7 +18,7 @@ public class FeedbackDAO {
     public static boolean hasFeedbackForEnrollment(int enrollmentId) {
         String query = "SELECT TOP 1 1 FROM feedback WHERE enrollment_id = ?";
 
-        try (Connection conn = Database.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setInt(1, enrollmentId);
@@ -33,9 +33,9 @@ public class FeedbackDAO {
     }
 
     public static boolean isEnrollmentOwnedByStudent(int enrollmentId, String studentUsername) {
-        String query = "SELECT 1 FROM student_enrollments WHERE id = ? AND student_username = ? LIMIT 1";
+        String query = "SELECT TOP 1 1 FROM student_enrollments WHERE id = ? AND student_username = ?";
 
-        try (Connection conn = Database.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setInt(1, enrollmentId);
@@ -64,7 +64,7 @@ public class FeedbackDAO {
                 "      WHERE se2.id = ?" +
                 "  )";
 
-        try (Connection conn = Database.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, studentUsername);
@@ -103,7 +103,7 @@ public class FeedbackDAO {
                 "INSERT INTO feedback (enrollment_id, clarity_rating, difficulty_rating, fairness_rating, engagement_rating, workload_rating, tags, comment) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection conn = Database.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setInt(1, enrollmentId);
@@ -135,7 +135,7 @@ public class FeedbackDAO {
                 "WHERE se.student_username = ? " +
                 "ORDER BY f.created_at DESC";
 
-        try (Connection conn = Database.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, studentUsername);

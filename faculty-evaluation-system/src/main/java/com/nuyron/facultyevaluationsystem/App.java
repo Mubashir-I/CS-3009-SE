@@ -14,8 +14,8 @@ import java.util.Properties;
 public class App extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws IOException {
-        // the main central start point of the application, currently set to the student_form.fxml
-        String startingView = "student_form.fxml";
+        // the main central start point of the application, currently set to the LoginPage.fxml
+        String startingView = "LoginPage.fxml";
 
         // for testing each member is working on different view that can be set in config.properties file
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("config.properties")) {

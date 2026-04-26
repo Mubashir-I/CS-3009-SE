@@ -1,8 +1,8 @@
-package faculty_evaluation.controllers;
+package com.nuyron.facultyevaluationsystem.controller;
 
-import faculty_evaluation.DAO.TeacherDAO;
-import faculty_evaluation.models.SceneTools;
-import faculty_evaluation.models.Session;
+import com.nuyron.facultyevaluationsystem.DAO.TeacherDAO;
+import com.nuyron.facultyevaluationsystem.models.SceneTools;
+import com.nuyron.facultyevaluationsystem.models.Session;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;

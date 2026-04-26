@@ -1,6 +1,6 @@
-package faculty_evaluation.DAO;
+package com.nuyron.facultyevaluationsystem.DAO;
 
-import faculty_evaluation.models.Database;
+import com.nuyron.facultyevaluationsystem.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,7 +18,7 @@ public class AdminReportsDAO {
 
         String query = "SELECT username, name FROM users WHERE role = 'TEACHER' ORDER BY name";
 
-        try (Connection conn = Database.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
 
@@ -52,7 +52,7 @@ public class AdminReportsDAO {
                 "WHERE u.username = ? " +
                 "GROUP BY u.username, u.name ";
 
-        try (Connection conn = Database.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, teacherUsername);
@@ -96,7 +96,7 @@ public class AdminReportsDAO {
                 "WHERE ca.teacher_username = ? " +
                 "ORDER BY f.created_at DESC";
 
-        try (Connection conn = Database.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, teacherUsername);

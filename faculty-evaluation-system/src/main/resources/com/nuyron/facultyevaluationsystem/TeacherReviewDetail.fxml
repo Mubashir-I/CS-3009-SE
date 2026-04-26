@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="460.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="faculty_evaluation.controllers.TeacherReviewDetailController">
+<BorderPane prefHeight="460.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nuyron.facultyevaluationsystem.controller.TeacherReviewDetailController">
     <top>
         <HBox spacing="12.0" style="-fx-background-color: #426c7a; -fx-padding: 12;">
             <children>
