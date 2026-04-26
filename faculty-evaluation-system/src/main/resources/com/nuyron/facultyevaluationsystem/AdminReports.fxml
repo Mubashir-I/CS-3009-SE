@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="12.0" prefWidth="560.0" prefHeight="385.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="faculty_evaluation.controllers.AdminReportsController" style="-fx-background-color: #f8fafc; -fx-padding: 14;">
+    <children>
+        <Label text="Admin Reports" textFill="#2f4f5b">
+            <font>
+                <Font name="Cal Sans Regular" size="24.0" />
+            </font>
+        </Label>
+
+        <HBox spacing="10.0" alignment="CENTER_LEFT">
+            <children>
+                <Label text="Teacher" textFill="#425d6a">
+                    <font>
+                        <Font name="Cal Sans Regular" size="14.0" />
+                    </font>
+                </Label>
+                <ComboBox fx:id="teacherComboBox" prefWidth="280.0" onAction="#onTeacherSelected" promptText="Select teacher" />
+            </children>
+        </HBox>
+
+        <VBox spacing="8.0" style="-fx-background-color: white; -fx-border-color: #d7e1e7; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 10;">
+            <children>
+                <Label text="Summary" textFill="#2f4f5b">
+                    <font>
+                        <Font name="Cal Sans Regular" size="18.0" />
+                    </font>
+                </Label>
+
+                <HBox spacing="10.0">
+                    <children>
+                        <VBox spacing="2.0" prefWidth="125.0" alignment="CENTER" style="-fx-background-color: #f7fbfc; -fx-border-color: #dde6eb; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 6;">
+                            <children>
+                                <Label text="Teacher" textFill="#425d6a" />
+                                <Label fx:id="teacherNameValueLabel" text="-" textFill="#2f4f5b" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="2.0" prefWidth="125.0" alignment="CENTER" style="-fx-background-color: #f7fbfc; -fx-border-color: #dde6eb; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 6;">
+                            <children>
+                                <Label text="Feedbacks" textFill="#425d6a" />
+                                <Label fx:id="feedbackCountValueLabel" text="0" textFill="#2f4f5b" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="2.0" prefWidth="125.0" alignment="CENTER" style="-fx-background-color: #f7fbfc; -fx-border-color: #dde6eb; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 6;">
+                            <children>
+                                <Label text="Overall" textFill="#425d6a" />
+                                <Label fx:id="overallAvgValueLabel" text="0" textFill="#2f4f5b" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="2.0" prefWidth="125.0" alignment="CENTER" style="-fx-background-color: #f7fbfc; -fx-border-color: #dde6eb; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 6;">
+                            <children>
+                                <Label text="Clarity" textFill="#425d6a" />
+                                <Label fx:id="clarityAvgValueLabel" text="0" textFill="#2f4f5b" />
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+
+                <HBox spacing="10.0">
+                    <children>
+                        <VBox spacing="2.0" prefWidth="125.0" alignment="CENTER" style="-fx-background-color: #f7fbfc; -fx-border-color: #dde6eb; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 6;">
+                            <children>
+                                <Label text="Difficulty" textFill="#425d6a" />
+                                <Label fx:id="difficultyAvgValueLabel" text="0" textFill="#2f4f5b" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="2.0" prefWidth="125.0" alignment="CENTER" style="-fx-background-color: #f7fbfc; -fx-border-color: #dde6eb; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 6;">
+                            <children>
+                                <Label text="Fairness" textFill="#425d6a" />
+                                <Label fx:id="fairnessAvgValueLabel" text="0" textFill="#2f4f5b" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="2.0" prefWidth="125.0" alignment="CENTER" style="-fx-background-color: #f7fbfc; -fx-border-color: #dde6eb; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 6;">
+                            <children>
+                                <Label text="Engagement" textFill="#425d6a" />
+                                <Label fx:id="engagementAvgValueLabel" text="0" textFill="#2f4f5b" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="2.0" prefWidth="125.0" alignment="CENTER" style="-fx-background-color: #f7fbfc; -fx-border-color: #dde6eb; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 6;">
+                            <children>
+                                <Label text="Workload" textFill="#425d6a" />
+                                <Label fx:id="workloadAvgValueLabel" text="0" textFill="#2f4f5b" />
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+
+        <VBox spacing="8.0" style="-fx-background-color: white; -fx-border-color: #d7e1e7; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 10;">
+            <children>
+                <Label text="Individual Ratings" textFill="#2f4f5b">
+                    <font>
+                        <Font name="Cal Sans Regular" size="18.0" />
+                    </font>
+                </Label>
+
+                <TableView fx:id="ratingsTable" prefHeight="160.0" prefWidth="530.0">
+                    <columns>
+                        <TableColumn fx:id="ratingCourseColumn" prefWidth="120.0" text="Course" />
+                        <TableColumn fx:id="ratingDateColumn" prefWidth="100.0" text="Date" />
+                        <TableColumn fx:id="ratingClarityColumn" prefWidth="55.0" text="C" />
+                        <TableColumn fx:id="ratingDifficultyColumn" prefWidth="55.0" text="D" />
+                        <TableColumn fx:id="ratingFairnessColumn" prefWidth="55.0" text="F" />
+                        <TableColumn fx:id="ratingEngagementColumn" prefWidth="65.0" text="E" />
+                        <TableColumn fx:id="ratingWorkloadColumn" prefWidth="65.0" text="W" />
+                        <TableColumn fx:id="ratingOverallColumn" prefWidth="55.0" text="Avg" />
+                    </columns>
+                </TableView>
+
+                <Label fx:id="statusLabel" textFill="red" />
+            </children>
+        </VBox>
+    </children>
+</VBox>
