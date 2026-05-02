@@ -134,7 +134,7 @@ public class TeacherDAO {
 
     public static String[] getReviewDetailForTeacher(String teacherUsername, int feedbackId) {
         String query =
-                "SELECT TOP 1 c.course_name, DATE_FORMAT(f.created_at, '%Y-%m-%d %H:%i') AS submitted_at, " +
+                "SELECT TOP 1 c.course_name, CONVERT(VARCHAR, f.created_at, 120) AS submitted_at, " +
                         "       ROUND((f.clarity_rating + f.difficulty_rating + f.fairness_rating + f.engagement_rating + f.workload_rating) / 5.0, 2) AS overall_rating, " +
                         "       COALESCE(f.tags, '') AS tags, COALESCE(f.comment, '') AS comment " +
                         "FROM feedback f " +

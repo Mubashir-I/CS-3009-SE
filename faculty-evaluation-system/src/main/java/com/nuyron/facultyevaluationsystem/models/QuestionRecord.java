@@ -25,7 +25,7 @@ public class QuestionRecord {
         this.typeMetadata = typeMetadata == null ? "" : typeMetadata;
     }
 
-    public int getQuestionid()           { return questionid; }
+    public int getQuestionId()           { return questionid; }
     public String getQuestionText() { return questionText; }
     public String getQuestionType() { return questionType; }
     public String getPerfFactor()   { return perfFactor; }

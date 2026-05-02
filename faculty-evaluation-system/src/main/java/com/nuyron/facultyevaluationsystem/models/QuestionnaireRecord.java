@@ -26,7 +26,7 @@ public class QuestionnaireRecord {
         this.createdAt     = createdAt == null ? "" : createdAt;
     }
 
-    public int getQnaireid()            { return qnaireid; }
+    public int getQnaireId()            { return qnaireid; }
     public String getName()          { return name; }
     public String getDescription()   { return description; }
     public int    getQuestionCount() { return questionCount; }

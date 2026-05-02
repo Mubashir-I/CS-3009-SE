@@ -13,8 +13,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import javafx.collections.ObservableList;
 
 public class AdminCoursesController {
+
     @FXML
     private TextField courseCodeTextField;
     @FXML
@@ -74,52 +76,150 @@ public class AdminCoursesController {
     private TableColumn<StudentEnrollment, String> enrollmentsStudentNameColumn;
 
     @FXML
-    private TextField assignTeacherCourseCodeTextField;
+    private ComboBox<String> assignCourseComboBox;
     @FXML
-    private TextField assignTeacherFacultyIdTextField;
+    private ComboBox<String> assignFacultyComboBox;
     @FXML
     private Button assignTeacherButton;
     @FXML
     private Label assignFacultyFillFieldLabel;
 
+    // Maps for Assign Faculty dropdowns
+    private final Map<String, String>  assignCourseDispToCode = new HashMap<>();   // "CODE — Name" -> "CODE"
+    private final Map<String, String>  assignFacultyDispToId  = new HashMap<>();   // "Name (id)"   -> "id"
+    private final Map<String, String>  assignCourseToDept     = new HashMap<>();   // "CODE"        -> dept
+    // Full item lists for filtering
+    private ObservableList<String> allCourseItems;
+    private ObservableList<String> allFacultyItems;
+
     @FXML
     private void assignTeacherToCourse(){
-        String courseCode = assignTeacherCourseCodeTextField.getText();
-        String facultyID = assignTeacherFacultyIdTextField.getText();
+        String courseDisplay  = assignCourseComboBox.getValue();
+        String facultyDisplay = assignFacultyComboBox.getValue();
 
-        if(courseCode == null || courseCode.trim().isEmpty() ||
-            facultyID == null || facultyID.trim().isEmpty()){
-            assignFacultyFillFieldLabel.setText("*Please fill all fields");
+        if (courseDisplay == null || courseDisplay.trim().isEmpty() ||
+            facultyDisplay == null || facultyDisplay.trim().isEmpty()) {
+            assignFacultyFillFieldLabel.setText("*Please select a course and teacher");
             return;
         }
-        else{
-            assignFacultyFillFieldLabel.setText("");
-            if(CourseDAO.assignTeacher(courseCode, facultyID)){
-                SceneTools.showAlert(Alert.AlertType.INFORMATION,
-                        "Success",
-                        "New course added!",
-                        facultyID + " has been assigned to " + courseCode);
-                setupAssignmentsTable();
-                initEnrollSelectors();
-                assignTeacherCourseCodeTextField.setText("");
-                assignTeacherFacultyIdTextField.setText("");
-            }
-            else{
-                SceneTools.showAlert(Alert.AlertType.ERROR,
-                        "Error", "Can not assign faculty to this course.",
-                        "This teacher can not be assigned because either the course code or the faculty ID is invalid.");
-            }
+
+        String courseCode = assignCourseDispToCode.get(courseDisplay);
+        String facultyID  = assignFacultyDispToId.get(facultyDisplay);
+
+        if (courseCode == null || facultyID == null) {
+            assignFacultyFillFieldLabel.setText("*Please select a valid course and teacher from the list");
+            return;
         }
 
-
-
+        assignFacultyFillFieldLabel.setText("");
+        if (CourseDAO.assignTeacher(courseCode, facultyID)) {
+            SceneTools.showAlert(Alert.AlertType.INFORMATION,
+                    "Success", "Teacher assigned!",
+                    facultyID + " has been assigned to " + courseCode);
+            setupAssignmentsTable();
+            initEnrollSelectors();
+            assignCourseComboBox.setValue(null);
+            assignFacultyComboBox.getItems().clear();
+            assignFacultyComboBox.setDisable(true);
+            assignFacultyDispToId.clear();
+            allFacultyItems = null;
+        } else {
+            SceneTools.showAlert(Alert.AlertType.ERROR,
+                    "Error", "Can not assign faculty to this course.",
+                    "This teacher may already be assigned, or the IDs are invalid.");
+        }
     }
+
+    /**
+     * Initialises the assignCourseComboBox with all courses and attaches a live-filter listener.
+     * Teachers are loaded when a course is selected (via onAssignCourseSelected).
+     */
+    private void initAssignSelectors() {
+        assignCourseDispToCode.clear();
+        assignCourseToDept.clear();
+        assignCourseComboBox.getItems().clear();
+
+        for (String[] row : CourseDAO.getAllCoursesForAssignment()) {
+            String code    = row[0];
+            String name    = row[1];
+            String dept    = row[2];
+            String display = code + " \u2014 " + name;
+            assignCourseDispToCode.put(display, code);
+            assignCourseToDept.put(code, dept);
+            assignCourseComboBox.getItems().add(display);
+        }
+        allCourseItems = javafx.collections.FXCollections.observableArrayList(
+                assignCourseComboBox.getItems());
+
+        // Live-filter: typing in the editor filters the dropdown items
+        assignCourseComboBox.getEditor().textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && assignCourseDispToCode.containsKey(newVal)) return; // exact match
+            String typed = newVal == null ? "" : newVal.toLowerCase();
+            ObservableList<String> filtered = allCourseItems.filtered(
+                    item -> item.toLowerCase().contains(typed));
+            assignCourseComboBox.setItems(filtered);
+            if (!typed.isEmpty()) assignCourseComboBox.show();
+        });
+
+        assignFacultyComboBox.setDisable(true);
+    }
+
+    /** Called when user selects a course in the assign-faculty ComboBox. */
+    @FXML
+    private void onAssignCourseSelected() {
+        String selected = assignCourseComboBox.getValue();
+        assignFacultyDispToId.clear();
+        assignFacultyComboBox.getItems().clear();
+        assignFacultyComboBox.setDisable(true);
+        allFacultyItems = null;
+
+        if (selected == null) return;
+        String courseCode = assignCourseDispToCode.get(selected);
+        if (courseCode == null) return;
+
+        String dept = assignCourseToDept.get(courseCode);
+        if (dept == null || dept.isBlank()) return;
+
+        for (String[] row : CourseDAO.getFacultyByDepartment(dept)) {
+            String username = row[0];
+            String name     = row[1];
+            String display  = name + " (" + username + ")";
+            assignFacultyDispToId.put(display, username);
+            assignFacultyComboBox.getItems().add(display);
+        }
+
+        allFacultyItems = javafx.collections.FXCollections.observableArrayList(
+                assignFacultyComboBox.getItems());
+
+        // Live-filter for faculty ComboBox
+        assignFacultyComboBox.getEditor().textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && assignFacultyDispToId.containsKey(newVal)) return;
+            if (allFacultyItems == null) return;
+            String typed = newVal == null ? "" : newVal.toLowerCase();
+            ObservableList<String> filtered = allFacultyItems.filtered(
+                    item -> item.toLowerCase().contains(typed));
+            assignFacultyComboBox.setItems(filtered);
+            if (!typed.isEmpty()) assignFacultyComboBox.show();
+        });
+
+        assignFacultyComboBox.setDisable(assignFacultyComboBox.getItems().isEmpty());
+    }
+
+    private static boolean containsAlphanumeric(String s) {
+        if (s == null) return false;
+        for (char c : s.toCharArray()) {
+            if (Character.isLetterOrDigit(c)) return true;
+        }
+        return false;
+    }
+
 
     public void initialize(){
         setupCoursesTable();
         setupAssignmentsTable();
         setupEnrollmentsTable();
         initEnrollSelectors();
+        initAssignSelectors();
     }
 
 
@@ -146,6 +246,18 @@ public class AdminCoursesController {
             fillFieldErrorLabel.setText("*Please fill in the required fields.");
             return;
         }
+        if (!containsAlphanumeric(courseCode)) {
+            fillFieldErrorLabel.setText("*Course code must contain at least one letter or digit.");
+            return;
+        }
+        if (!containsAlphanumeric(courseName)) {
+            fillFieldErrorLabel.setText("*Course name must contain at least one letter or digit.");
+            return;
+        }
+        if (!containsAlphanumeric(dept)) {
+            fillFieldErrorLabel.setText("*Department must contain at least one letter or digit.");
+            return;
+        }
         else{
             fillFieldErrorLabel.setText("");
             // Add to DB logic.
@@ -170,7 +282,7 @@ public class AdminCoursesController {
     }
 
     private void setupCoursesTable() {
-        courseIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        courseIdColumn.setCellValueFactory(new PropertyValueFactory<>("courseId"));
         courseCodeColumn.setCellValueFactory(new PropertyValueFactory<>("courseCode"));
         courseTitleColumn.setCellValueFactory(new PropertyValueFactory<>("courseName"));
 
@@ -179,7 +291,7 @@ public class AdminCoursesController {
     }
 
     private void setupAssignmentsTable() {
-        assignmentsIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        assignmentsIdColumn.setCellValueFactory(new PropertyValueFactory<>("assignmentId"));
         assignmentsCourseCodeColumn.setCellValueFactory(new PropertyValueFactory<>("courseCode"));
         assignmentsCourseNameColumn.setCellValueFactory(new PropertyValueFactory<>("courseName"));
         assignmentsFacultyIdColumn.setCellValueFactory(new PropertyValueFactory<>("facultyId"));
@@ -190,7 +302,7 @@ public class AdminCoursesController {
     }
 
     private void setupEnrollmentsTable() {
-        enrollmentsIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        enrollmentsIdColumn.setCellValueFactory(new PropertyValueFactory<>("enrollmentid"));
         enrollmentsCourseCodeColumn.setCellValueFactory(new PropertyValueFactory<>("courseCode"));
         enrollmentsStudentIdColumn.setCellValueFactory(new PropertyValueFactory<>("studentId"));
         enrollmentsStudentNameColumn.setCellValueFactory(new PropertyValueFactory<>("studentName"));
@@ -209,6 +321,10 @@ public class AdminCoursesController {
             selectedCourseDisplay == null || selectedCourseDisplay.trim().isEmpty() ||
             selectedTeacherDisplay == null || selectedTeacherDisplay.trim().isEmpty()){
             enrollStudentFillFieldLabel.setText("*Please fill all fields");
+            return;
+        }
+        if (!containsAlphanumeric(studentID)) {
+            enrollStudentFillFieldLabel.setText("*Student ID must contain at least one letter or digit");
             return;
         }
 

@@ -90,7 +90,7 @@ public class StudentDashboardController {
             return;
         }
 
-        Session.selectedEnrollmentId = selected.getAssignmentid();
+        Session.selectedEnrollmentId = selected.getAssignmentId();
         SceneTools.changeScene("StudentReview.fxml", errorLabel);
     }
 

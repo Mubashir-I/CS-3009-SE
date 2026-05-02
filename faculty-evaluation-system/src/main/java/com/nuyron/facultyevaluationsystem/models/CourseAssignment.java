@@ -15,7 +15,7 @@ public class CourseAssignment {
         this.facultyName = facultyName;
     }
 
-    public int getAssignmentid() { return assignmentid; }
+    public int getAssignmentId() { return assignmentid; }
     public String getCourseCode() { return courseCode; }
     public String getCourseName() { return courseName; }
     public String getFacultyId() { return facultyId; }

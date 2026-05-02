@@ -11,7 +11,7 @@ public class Course {
         this.dept = dept;
     }
 
-    public int getCourseid() {
+    public int getCourseId() {
         return courseid;
     }
 

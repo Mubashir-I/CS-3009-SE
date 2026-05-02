@@ -16,6 +16,7 @@ import javafx.scene.layout.ColumnConstraints;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
 
 public class AdminFormsController {
 
@@ -91,7 +92,7 @@ public class AdminFormsController {
     }
 
     private void setupTab2() {
-        qColId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        qColId.setCellValueFactory(new PropertyValueFactory<>("questionId"));
         qColText.setCellValueFactory(new PropertyValueFactory<>("questionText"));
         qColType.setCellValueFactory(new PropertyValueFactory<>("questionType"));
         qColFactor.setCellValueFactory(new PropertyValueFactory<>("perfFactor"));
@@ -105,7 +106,7 @@ public class AdminFormsController {
     }
 
     private void setupTab3() {
-        aqColId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        aqColId.setCellValueFactory(new PropertyValueFactory<>("questionId"));
         aqColText.setCellValueFactory(new PropertyValueFactory<>("questionText"));
         aqColType.setCellValueFactory(new PropertyValueFactory<>("questionType"));
         aqColFactor.setCellValueFactory(new PropertyValueFactory<>("perfFactor"));
@@ -119,7 +120,7 @@ public class AdminFormsController {
     }
 
     private void setupTab4() {
-        fColId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        fColId.setCellValueFactory(new PropertyValueFactory<>("qnaireId"));
         fColName.setCellValueFactory(new PropertyValueFactory<>("name"));
         fColDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
         fColQCount.setCellValueFactory(new PropertyValueFactory<>("questionCount"));
@@ -169,7 +170,7 @@ public class AdminFormsController {
     }
 
     private void setupTab6() {
-        fsColId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        fsColId.setCellValueFactory(new PropertyValueFactory<>("scheduleId"));
         fsColQnaire.setCellValueFactory(new PropertyValueFactory<>("questionnaireName"));
         fsColDept.setCellValueFactory(new PropertyValueFactory<>("department"));
         fsColCourse.setCellValueFactory(new PropertyValueFactory<>("courseCode"));
@@ -243,6 +244,15 @@ public class AdminFormsController {
         optTf.setOnAction(e -> {
             String val = optTf.getText().trim();
             if (!val.isEmpty()) {
+                if (optList.getItems().contains(val)) {
+                    setStatus(addQuestionStatusLabel, "* This option already exists in the list.", true);
+                    return;
+                }
+                if (!containsAlphanumeric(val)) {
+                    setStatus(addQuestionStatusLabel, "* Option text must contain at least one letter or digit.", true);
+                    return;
+                }
+                setStatus(addQuestionStatusLabel, "", false);
                 optList.getItems().add(val);
                 optTf.clear();
             }
@@ -289,10 +299,25 @@ public class AdminFormsController {
         Label o1L = new Label("Option 1:"); TextField o1Tf = new TextField("Yes");
         Label o2L = new Label("Option 2:"); TextField o2Tf = new TextField("No");
         o1Tf.setId("binOpt1"); o2Tf.setId("binOpt2");
-
+        // Bug 7 fix: options default to alphanumeric values — already done
         grid.add(o1L, 0, 0); grid.add(o1Tf, 1, 0);
         grid.add(o2L, 0, 1); grid.add(o2Tf, 1, 1);
         questionDynamicArea.getChildren().add(grid);
+    }
+
+    private static boolean containsAlphanumeric(String s) {
+        if (s == null) return false;
+        for (char c : s.toCharArray()) {
+            if (Character.isLetterOrDigit(c)) return true;
+        }
+        return false;
+    }
+
+    private static int semesterYear(String semester) {
+        if (semester == null) return -1;
+        String[] parts = semester.split(" ", 2);
+        if (parts.length < 2) return -1;
+        try { return Integer.parseInt(parts[1].trim()); } catch (NumberFormatException e) { return -1; }
     }
 
     @FXML
@@ -303,6 +328,10 @@ public class AdminFormsController {
 
         if (text == null || text.isBlank() || type == null || factor == null) {
             setStatus(addQuestionStatusLabel, "* Please fill in all required fields.", true);
+            return;
+        }
+        if (!containsAlphanumeric(text)) {
+            setStatus(addQuestionStatusLabel, "* Question text must contain at least one letter or digit.", true);
             return;
         }
 
@@ -345,32 +374,52 @@ public class AdminFormsController {
                 case "LIKERT" -> {
                     TextField maxTf = (TextField) grid.lookup("#likertMax");
                     ListView<String> optList = (ListView<String>) grid.lookup("#likertOptList");
-                    int maxScale    = Integer.parseInt(maxTf.getText().trim());
+                    int maxScale = Integer.parseInt(maxTf.getText().trim());
+                    if (optList.getItems().isEmpty()) return null; // need at least one option
                     StringBuilder opts = new StringBuilder();
                     for (String val : optList.getItems()) {
+                        if (!containsAlphanumeric(val)) return null;
                         if (opts.length() > 0) opts.append(",");
                         opts.append(val);
                     }
-                    if (opts.length() == 0) return null; // need at least one option
                     return QuestionDAO.buildLikertMetadata(maxScale, opts.toString());
                 }
                 case "SLIDER" -> {
                     TextField lblTf = (TextField) grid.lookup("#sliderLabel");
                     TextField minTf = (TextField) grid.lookup("#sliderMin");
                     TextField maxTf = (TextField) grid.lookup("#sliderMax");
-                    return QuestionDAO.buildSliderMetadata(
-                            lblTf.getText().trim(),
-                            Integer.parseInt(minTf.getText().trim()),
-                            Integer.parseInt(maxTf.getText().trim()));
+                    String lbl = lblTf.getText().trim();
+                    if (!containsAlphanumeric(lbl)) {
+                        setStatus(addQuestionStatusLabel, "* Slider label must contain at least one letter or digit.", true);
+                        return null;
+                    }
+                    int min = Integer.parseInt(minTf.getText().trim());
+                    int max = Integer.parseInt(maxTf.getText().trim());
+                    if (max <= min) {
+                        setStatus(addQuestionStatusLabel, "* Slider max value must be greater than min value.", true);
+                        return null;
+                    }
+                    return QuestionDAO.buildSliderMetadata(lbl, min, max);
                 }
                 case "TEXT" -> {
                     TextField msgTf = (TextField) grid.lookup("#textMessage");
-                    return QuestionDAO.buildTextMetadata(msgTf.getText().trim());
+                    String msg = msgTf.getText().trim();
+                    if (!msg.isEmpty() && !containsAlphanumeric(msg)) {
+                        setStatus(addQuestionStatusLabel, "* Instructions must contain at least one letter or digit.", true);
+                        return null;
+                    }
+                    return QuestionDAO.buildTextMetadata(msg);
                 }
                 case "BINARY" -> {
                     TextField o1 = (TextField) grid.lookup("#binOpt1");
                     TextField o2 = (TextField) grid.lookup("#binOpt2");
-                    return QuestionDAO.buildBinaryMetadata(o1.getText().trim(), o2.getText().trim());
+                    String opt1 = o1.getText().trim();
+                    String opt2 = o2.getText().trim();
+                    if (!containsAlphanumeric(opt1) || !containsAlphanumeric(opt2)) {
+                        setStatus(addQuestionStatusLabel, "* Binary options must each contain at least one letter or digit.", true);
+                        return null;
+                    }
+                    return QuestionDAO.buildBinaryMetadata(opt1, opt2);
                 }
             }
         } catch (Exception e) {
@@ -386,13 +435,13 @@ public class AdminFormsController {
             setStatus(addFormStatusLabel, "* Select a question from the table first.", true);
             return;
         }
-        if (selectedQuestionIds.contains(selected.getQuestionid())) {
+        if (selectedQuestionIds.contains(selected.getQuestionId())) {
             setStatus(addFormStatusLabel, "* This question is already added.", true);
             return;
         }
-        selectedQuestionIds.add(selected.getQuestionid());
+        selectedQuestionIds.add(selected.getQuestionId());
         selectedQuestionsList.getItems().add(
-                "[" + selected.getQuestionid() + "] " + selected.getPerfFactor()
+                "[" + selected.getQuestionId() + "] " + selected.getPerfFactor()
                 + " — " + selected.getQuestionText());
         setStatus(addFormStatusLabel, "", false);
     }
@@ -412,6 +461,14 @@ public class AdminFormsController {
 
         if (name == null || name.isBlank()) {
             setStatus(addFormStatusLabel, "* Form name is required.", true);
+            return;
+        }
+        if (!containsAlphanumeric(name)) {
+            setStatus(addFormStatusLabel, "* Form name must contain at least one letter or digit.", true);
+            return;
+        }
+        if (desc != null && !desc.isBlank() && !containsAlphanumeric(desc)) {
+            setStatus(addFormStatusLabel, "* Description must contain at least one letter or digit.", true);
             return;
         }
         if (selectedQuestionIds.isEmpty()) {
@@ -471,6 +528,19 @@ public class AdminFormsController {
         if (pushEndDate.getValue().isBefore(pushStartDate.getValue())) {
             setStatus(pushStatusLabel, "* End date must be on or after start date.", true);
             return;
+        }
+
+        int semYear = semesterYear(semester);
+        if (semYear > 0) {
+            LocalDate startDate = pushStartDate.getValue();
+            LocalDate endDate   = pushEndDate.getValue();
+            if (startDate.getYear() != semYear || endDate.getYear() != semYear) {
+                setStatus(pushStatusLabel,
+                        "* The schedule dates must fall within the year " + semYear
+                        + " matching the selected semester '" + semester + "'.",
+                        true);
+                return;
+            }
         }
 
         Integer qnaireId   = formNameToId.get(formDisp);

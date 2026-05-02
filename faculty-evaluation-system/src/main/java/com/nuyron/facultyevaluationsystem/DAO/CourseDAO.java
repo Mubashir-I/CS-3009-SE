@@ -249,4 +249,39 @@ public class CourseDAO {
         }
         return list;
     }
+    public static List<String[]> getFacultyByDepartment(String department) {
+        List<String[]> list = new ArrayList<>();
+        String query = "SELECT username, name FROM users WHERE role = 'TEACHER' AND department = ? ORDER BY name";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, department);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    list.add(new String[]{ rs.getString("username"), rs.getString("name") });
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public static List<String[]> getAllCoursesForAssignment() {
+        List<String[]> list = new ArrayList<>();
+        String query = "SELECT course_code, course_name, department FROM courses ORDER BY course_code";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                list.add(new String[]{
+                        rs.getString("course_code"),
+                        rs.getString("course_name"),
+                        rs.getString("department")
+                });
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

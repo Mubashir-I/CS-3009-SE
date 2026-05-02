@@ -82,7 +82,7 @@
                      </children></AnchorPane>
                </content>
             </Tab>
-          <Tab text="Assign Faculty">
+           <Tab text="Assign Faculty">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -91,22 +91,14 @@
                               <Font name="Cal Sans Regular" size="18.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="assignTeacherCourseCodeTextField" layoutX="204.0" layoutY="136.0" prefHeight="25.0" prefWidth="194.0" promptText=" (i.e. CS3009)">
-                           <font>
-                              <Font size="10.0" />
-                           </font>
-                        </TextField>
-                        <Label layoutX="204.0" layoutY="119.0" text="Course code" textFill="#425d6a">
+                        <ComboBox fx:id="assignCourseComboBox" editable="true" layoutX="204.0" layoutY="136.0" prefHeight="25.0" prefWidth="194.0" promptText="Type or select course" onAction="#onAssignCourseSelected" />
+                        <Label layoutX="204.0" layoutY="119.0" text="Course" textFill="#425d6a">
                            <font>
                               <Font name="Cal Sans Regular" size="12.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="assignTeacherFacultyIdTextField" layoutX="203.0" layoutY="186.0" prefHeight="25.0" prefWidth="194.0" promptText=" (i.e. furqan.nasir)">
-                           <font>
-                              <Font size="10.0" />
-                           </font>
-                        </TextField>
-                        <Label layoutX="203.0" layoutY="169.0" text="Faculty ID" textFill="#425d6a">
+                        <ComboBox fx:id="assignFacultyComboBox" editable="true" disable="true" layoutX="203.0" layoutY="186.0" prefHeight="25.0" prefWidth="194.0" promptText="Type or select teacher" />
+                        <Label layoutX="203.0" layoutY="169.0" text="Faculty" textFill="#425d6a">
                            <font>
                               <Font name="Cal Sans Regular" size="12.0" />
                            </font>
@@ -117,7 +109,7 @@
                               <Font name="Cal Sans Regular" size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="assignFacultyFillFieldLabel" layoutX="304.0" layoutY="102.0" textFill="#b53016">
+                        <Label fx:id="assignFacultyFillFieldLabel" layoutX="204.0" layoutY="102.0" textFill="#b53016">
                            <font>
                               <Font name="Cal Sans Regular" size="12.0" />
                            </font>

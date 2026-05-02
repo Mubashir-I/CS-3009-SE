@@ -126,7 +126,7 @@ public class StudentFormFillController {
             } else {
                 score = 100;
             }
-            return new FormResponseDAO.ResponseAnswer(q.getQuestionid(), q.getQuestionText(), q.getQuestionType(), q.getPerfFactor(), ans, score);
+            return new FormResponseDAO.ResponseAnswer(q.getQuestionId(), q.getQuestionText(), q.getQuestionType(), q.getPerfFactor(), ans, score);
         };
     }
 
@@ -150,7 +150,7 @@ public class StudentFormFillController {
             
             String ans = selected.getText();
             double score = (selected == rb1) ? 100.0 : 0.0;
-            return new FormResponseDAO.ResponseAnswer(q.getQuestionid(), q.getQuestionText(), q.getQuestionType(), q.getPerfFactor(), ans, score);
+            return new FormResponseDAO.ResponseAnswer(q.getQuestionId(), q.getQuestionText(), q.getQuestionType(), q.getPerfFactor(), ans, score);
         };
     }
 
@@ -180,7 +180,7 @@ public class StudentFormFillController {
             if (max > min) {
                 score = 100.0 * (val - min) / (max - min);
             }
-            return new FormResponseDAO.ResponseAnswer(q.getQuestionid(), q.getQuestionText(), q.getQuestionType(), q.getPerfFactor(), String.valueOf((int)val), score);
+            return new FormResponseDAO.ResponseAnswer(q.getQuestionId(), q.getQuestionText(), q.getQuestionType(), q.getPerfFactor(), String.valueOf((int)val), score);
         };
     }
 
@@ -194,7 +194,7 @@ public class StudentFormFillController {
         return () -> {
             String text = ta.getText();
             if (text == null || text.trim().isEmpty()) return null;
-            return new FormResponseDAO.ResponseAnswer(q.getQuestionid(), q.getQuestionText(), q.getQuestionType(), q.getPerfFactor(), text.trim(), null);
+            return new FormResponseDAO.ResponseAnswer(q.getQuestionId(), q.getQuestionText(), q.getQuestionType(), q.getPerfFactor(), text.trim(), null);
         };
     }
 
@@ -214,7 +214,7 @@ public class StudentFormFillController {
         }
 
         boolean ok = FormResponseDAO.saveResponse(
-                schedule.getScheduleid(),
+                schedule.getScheduleId(),
                 Session.currentUser.getUsername(),
                 schedule.getDepartment(),
                 schedule.getCourseCode(),

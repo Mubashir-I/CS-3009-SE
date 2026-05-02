@@ -87,7 +87,8 @@ public class AdminUsersController {
     @FXML
     private void onRoleSelected() {
         String role = userTypeComboBox.getValue();
-        boolean needsDept = "HOD".equals(role) || "TEACHER".equals(role);
+        // Department required for STUDENT, TEACHER, HOD — not for ADMIN
+        boolean needsDept = "STUDENT".equals(role) || "HOD".equals(role) || "TEACHER".equals(role);
         departmentComboBox.setVisible(needsDept);
         departmentComboBox.setManaged(needsDept);
         // find the label above departmentComboBox
@@ -147,23 +148,34 @@ public class AdminUsersController {
         }
     }
 
+    private static boolean containsAlphanumeric(String s) {
+        if (s == null) return false;
+        for (char c : s.toCharArray()) {
+            if (Character.isLetterOrDigit(c)) return true;
+        }
+        return false;
+    }
+
     private String validateUser(String accountName, String username, String loginID,
                                 String role, String department){
         if(accountName.isEmpty() || username.isEmpty() || loginID.isEmpty() || role == null || role.isEmpty()){
             return "All fields must be filled.";
         }
-        if(("HOD".equals(role) || "TEACHER".equals(role)) &&
+        if (!containsAlphanumeric(accountName)) {
+            return "Account name must contain at least one letter or digit.";
+        }
+        if (("HOD".equals(role) || "TEACHER".equals(role) || "STUDENT".equals(role)) &&
                 (department == null || department.isBlank())) {
-            return "Department is required for HOD and Teacher accounts.";
+            return "Department is required for Student, HOD, and Teacher accounts.";
         }
         if(role.equalsIgnoreCase("Student")){
             if(!username.matches("^[a-zA-Z]\\d{6}$")){
                 return "Student ID must start with the campus initials, followed by batch-no, and roll-no (i.e. 23I-0606)";
             }
         }
-        else if(role.equalsIgnoreCase("Teacher")){
+        else if(role.equalsIgnoreCase("Teacher") || role.equalsIgnoreCase("HOD")){
             if(!username.matches("^[a-zA-Z]+\\.[a-zA-Z]+$")){
-                return "Teacher ID must be in the format: [FirstName] . [LastName]";
+                return "User ID must be in the format: [FirstName] . [LastName]";
             }
         }
         return null;
@@ -208,9 +220,21 @@ public class AdminUsersController {
             SceneTools.showAlert(AlertType.ERROR, "Error", "Missing Information", "Please enter the Current Login ID of the user you want to update.");
             return;
         }
+        if (!containsAlphanumeric(currentId)) {
+            SceneTools.showAlert(AlertType.ERROR, "Error", "Invalid Input", "Current Login ID must contain at least one letter or digit.");
+            return;
+        }
 
         if ((newName == null || newName.trim().isEmpty()) && (newId == null || newId.trim().isEmpty())) {
             SceneTools.showAlert(AlertType.WARNING, "Warning", "No changes provided", "Please enter a new name or a new login ID to update.");
+            return;
+        }
+        if (newName != null && !newName.trim().isEmpty() && !containsAlphanumeric(newName)) {
+            SceneTools.showAlert(AlertType.ERROR, "Error", "Invalid Input", "New Account Name must contain at least one letter or digit.");
+            return;
+        }
+        if (newId != null && !newId.trim().isEmpty() && !containsAlphanumeric(newId)) {
+            SceneTools.showAlert(AlertType.ERROR, "Error", "Invalid Input", "New Login ID must contain at least one letter or digit.");
             return;
         }
 

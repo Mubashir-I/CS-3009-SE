@@ -68,18 +68,27 @@ public class StudentReviewController {
             return;
         }
 
-        if (FeedbackDAO.hasFeedbackForEnrollment(enrollmentId)) {
-            setError("Feedback already exists for this enrollment.");
-            return;
-        }
+//        if (FeedbackDAO.hasFeedbackForEnrollment(enrollmentId)) {
+//            setError("Review already exists for this enrollment.");
+//            return;
+//        }
 
         if (FeedbackDAO.hasRecentFeedbackForSameTeacher(Session.currentUser.getUsername(), enrollmentId, FEEDBACK_GAP_DAYS)) {
-            setError("You can submit feedback for this teacher again after " + FEEDBACK_GAP_DAYS + " days.");
+            setError("You can submit review for this teacher again after " + FEEDBACK_GAP_DAYS + " days.");
             return;
         }
 
         String tags = tagsField.getText();
         String comments = commentsArea.getText();
+
+        if (tags != null && !tags.trim().isEmpty() && !containsAlphanumeric(tags)) {
+            setError("Tags must contain at least one letter or digit, or leave the field empty.");
+            return;
+        }
+        if (comments != null && !comments.trim().isEmpty() && !containsAlphanumeric(comments)) {
+            setError("Comments must contain at least one letter or digit, or leave the field empty.");
+            return;
+        }
 
         boolean saved = FeedbackDAO.addFeedback(
                 enrollmentId,
@@ -117,5 +126,13 @@ public class StudentReviewController {
     private void setError(String message) {
         statusLabel.setStyle("-fx-text-fill: red;");
         statusLabel.setText(message);
+    }
+
+    private static boolean containsAlphanumeric(String s) {
+        if (s == null) return false;
+        for (char c : s.toCharArray()) {
+            if (Character.isLetterOrDigit(c)) return true;
+        }
+        return false;
     }
 }

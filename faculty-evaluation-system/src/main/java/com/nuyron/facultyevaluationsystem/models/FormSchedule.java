@@ -36,7 +36,7 @@ public class FormSchedule {
         this.createdAt         = createdAt == null ? "" : createdAt;
     }
 
-    public int getScheduleid()                { return scheduleid; }
+    public int getScheduleId()                { return scheduleid; }
     public int    getQuestionnaireId()   { return questionnaireId; }
     public String getQuestionnaireName() { return questionnaireName; }
     public String getDepartment()        { return department; }

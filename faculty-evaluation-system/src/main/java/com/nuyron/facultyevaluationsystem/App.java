@@ -30,7 +30,7 @@ public class App extends javafx.application.Application {
 
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(startingView)));
         Scene scene = new Scene(root);
-        stage.setTitle("Student Form");
+        stage.setTitle("Faculty Evaluation and Feedback System");
         stage.setScene(scene);
         stage.show();
     }
